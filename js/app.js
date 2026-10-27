@@ -480,11 +480,11 @@ function downloadFile(type) {
     );
     content = [header.join(";"), ...rows].join("\n");
     mime = "text/csv;charset=utf-8";
-    name = "musterstadt-feedback-dummy.csv";
+    name = "feedback-dummy.csv";
   } else {
     content = JSON.stringify(items, null, 2);
     mime = "application/json";
-    name = "musterstadt-feedback-dummy.json";
+    name = "feedback-dummy.json";
   }
   const blob = new Blob([content], { type: mime });
   const url = URL.createObjectURL(blob);
@@ -520,7 +520,7 @@ function init() {
   $("#info-btn").addEventListener("click", () => {
     openModal(
       "Hinweise zum Clickdummy",
-      `<p>Dieses Dashboard ist ein interaktiver Prototyp für eine fiktive Stadtverwaltung („Musterstadt“). Alle Zahlen, Dienststellenbezüge und Freitexte sind fiktiv.</p>
+      `<p>Dieses Dashboard ist ein interaktiver Prototyp. Alle Zahlen, Dienststellenbezüge und Freitexte sind fiktiv.</p>
        <ul>
          <li>Die linke Navigation wechselt die Unterseiten.</li>
          <li>Filter oben wirken auf alle Ansichten.</li>

@@ -1,6 +1,6 @@
 # Online-Dienst Feedback Dashboard (Clickdummy)
 
-Interaktiver Klickprototyp für ein Feedback-Dashboard einer fiktiven Stadtverwaltung („Musterstadt“). Alle Daten sind **fiktiv** und zufällig erzeugt; es besteht kein Bezug zu einer realen Behörde.
+Interaktiver Klickprototyp für ein Feedback-Dashboard der Stadt Augsburg. Alle Daten sind **fiktiv** und zufällig erzeugt; das Logo dient nur der Demonstration.
 
 ## Funktionen
 
