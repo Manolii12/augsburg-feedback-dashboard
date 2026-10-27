@@ -69,16 +69,14 @@ function pick(rng, list) {
 }
 
 const OVERALL_WEIGHTS = [
-  [1, 0.02],
-  [2, 0.04],
-  [3, 0.09],
-  [4, 0.17],
-  [5, 0.23],
-  [6, 0.21],
-  [7, 0.24],
+  [1, 0.04],
+  [2, 0.08],
+  [3, 0.20],
+  [4, 0.38],
+  [5, 0.30],
 ];
 
-const STATEMENT_BIAS = [0.35, 0.1, -0.15, -0.05, 0.2, 0.2];
+const STATEMENT_BIAS = [0.25, 0.05, -0.1, -0.05, 0.15, 0.15];
 
 function weightedScore(rng) {
   const r = rng();
@@ -87,11 +85,11 @@ function weightedScore(rng) {
     acc += weight;
     if (r <= acc) return score;
   }
-  return 7;
+  return 5;
 }
 
 function clampScore(n) {
-  return Math.min(7, Math.max(1, Math.round(n)));
+  return Math.min(5, Math.max(1, Math.round(n)));
 }
 
 function relatedScore(rng, overall, bias) {
@@ -121,7 +119,7 @@ function generateFeedback(count = 1248, seed = 2024) {
     let comment = "";
     let commentType = null;
     const commentRoll = rng();
-    if (overall >= 6 && commentRoll < 0.28) {
+    if (overall >= 4 && commentRoll < 0.28) {
       comment = pick(rng, POSITIVE_COMMENTS);
       commentType = "positive";
     } else if (overall <= 2 && commentRoll < 0.7) {

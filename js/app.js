@@ -30,14 +30,14 @@ function overall(item) {
 }
 
 function bucket(score) {
-  if (score >= 6) return "top";
+  if (score >= 4) return "top";
   if (score <= 2) return "low";
   return "mid";
 }
 
 function stats(items) {
   const n = items.length;
-  const dist = [0, 0, 0, 0, 0, 0, 0];
+  const dist = [0, 0, 0, 0, 0];
   const statementSums = STATEMENTS.map(() => 0);
   let top = 0;
   let mid = 0;
@@ -48,7 +48,7 @@ function stats(items) {
     const o = overall(item);
     dist[o - 1] += 1;
     sum += item.avg;
-    if (o >= 6) top += 1;
+    if (o >= 4) top += 1;
     else if (o <= 2) low += 1;
     else mid += 1;
     item.scores.forEach((s, i) => (statementSums[i] += s));
@@ -78,7 +78,7 @@ function fmtAvg(n) {
 }
 
 function sentimentLabel(score) {
-  if (score >= 6) return "Top-2 (zufrieden)";
+  if (score >= 4) return "Top-2 (zufrieden)";
   if (score <= 2) return "Bottom-2 (unzufrieden)";
   return "Neutral";
 }
@@ -114,7 +114,7 @@ function renderOverview(items, s) {
   const quotes = items.filter((i) => i.commentType === "positive").slice(0, 4);
   const statementRows = STATEMENTS.map((text, i) => {
     const avg = s.statementAvgs[i];
-    const width = (avg / 7) * 100;
+    const width = (avg / 5) * 100;
     return `<div class="statement-row clickable-row" data-statement="${i}" role="button" tabindex="0">
       <b>${i + 1}.</b>
       <p>${text}</p>
@@ -143,18 +143,18 @@ function renderOverview(items, s) {
   return `
     <section class="kpi-row">
       ${kpiCard("count", "Anzahl Bewertungen", fmt(s.n), "Rückmeldungen", peopleIcon())}
-      ${kpiCard("avg", "Durchschnittliche Bewertung", `${fmtAvg(s.avg)} / 7`, "Mittelwert", starIcon())}
-      ${kpiCard("top", "Zufriedenheit (Top-2-Box)", `${s.topPct} %`, "Zustimmung (6–7)", upIcon())}
+      ${kpiCard("avg", "Durchschnittliche Bewertung", `${fmtAvg(s.avg)} / 5`, "Mittelwert", starIcon())}
+      ${kpiCard("top", "Zufriedenheit (Top-2-Box)", `${s.topPct} %`, "Zustimmung (4–5)", upIcon())}
       ${kpiCard("low", "Unzufriedenheit (Bottom-2-Box)", `${s.lowPct} %`, "Ablehnung (1–2)", downIcon())}
     </section>
     <section class="split">
       <article class="card">
-        <h2 class="card-title">Bewertung je Aussage (Ø auf Skala 1–7)</h2>
+        <h2 class="card-title">Bewertung je Aussage (Ø auf Skala 1–5)</h2>
         <div class="statement-head" style="display:grid;grid-template-columns:28px 1fr 210px 36px;gap:10px;color:var(--muted);font-size:12px;">
           <span>#</span><span>Aussage</span><span></span><span>Durchschnitt</span>
         </div>
         ${statementRows}
-        <div class="scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div>
+        <div class="scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
         <div class="scale-caption"><span>Stimme überhaupt nicht zu</span><span>Weder noch</span><span>Stimme voll und ganz zu</span></div>
       </article>
       <article class="card">
@@ -180,8 +180,8 @@ function renderOverview(items, s) {
             <div class="donut-center"><strong>${fmt(s.n)}</strong><span>Rückmeldungen</span></div>
           </div>
           <div class="legend">
-            <div><span class="dot" style="background:#165a32"></span> Top-2 (6–7) <span class="pct">${s.topPct}%</span></div>
-            <div><span class="dot" style="background:#9aa19c"></span> Neutral (3–5) <span class="pct">${s.midPct}%</span></div>
+            <div><span class="dot" style="background:#165a32"></span> Top-2 (4–5) <span class="pct">${s.topPct}%</span></div>
+            <div><span class="dot" style="background:#9aa19c"></span> Neutral (3) <span class="pct">${s.midPct}%</span></div>
             <div><span class="dot" style="background:#c62828"></span> Bottom-2 (1–2) <span class="pct">${s.lowPct}%</span></div>
           </div>
         </div>
@@ -241,7 +241,7 @@ function renderRatings(items) {
         <td>${formatDate(item.created)}</td>
         <td>${item.office}</td>
         <td>${item.service}</td>
-        <td><span class="stars">${"★".repeat(Math.max(1, Math.round(item.avg)))}${"☆".repeat(7 - Math.max(1, Math.round(item.avg)))}</span></td>
+        <td><span class="stars">${"★".repeat(Math.max(1, Math.round(item.avg)))}${"☆".repeat(5 - Math.max(1, Math.round(item.avg)))}</span></td>
         <td>${fmtAvg(item.avg)}</td>
         <td><span class="badge ${bucket(o)}">${sentimentLabel(o)}</span></td>
       </tr>`;
@@ -265,7 +265,7 @@ function renderRatings(items) {
 
 function renderDetails(items, s) {
   const cards = STATEMENTS.map((text, i) => {
-    const dist = [0, 0, 0, 0, 0, 0, 0];
+    const dist = [0, 0, 0, 0, 0];
     items.forEach((item) => dist[item.scores[i] - 1]++);
     const bars = dist
       .map((c, idx) => {
@@ -279,7 +279,7 @@ function renderDetails(items, s) {
       .join("");
     return `<button class="card clickable" data-statement="${i}">
       <h3 class="card-title">${i + 1}. ${text}</h3>
-      <p style="margin:0 0 8px;color:var(--green);font-weight:700">Ø ${fmtAvg(s.statementAvgs[i])} / 7</p>
+      <p style="margin:0 0 8px;color:var(--green);font-weight:700">Ø ${fmtAvg(s.statementAvgs[i])} / 5</p>
       ${bars}
     </button>`;
   }).join("");
@@ -313,7 +313,7 @@ function renderFeedback(items) {
 function renderExport(items, s) {
   return `<article class="card">
     <h2 class="card-title">Export (Clickdummy)</h2>
-    <p>Die aktuelle Filterung umfasst <strong>${fmt(s.n)}</strong> fiktive Rückmeldungen. Mittelwert: <strong>${fmtAvg(s.avg)} / 7</strong>.</p>
+    <p>Die aktuelle Filterung umfasst <strong>${fmt(s.n)}</strong> fiktive Rückmeldungen. Mittelwert: <strong>${fmtAvg(s.avg)} / 5</strong>.</p>
     <div class="export-actions">
       <button class="btn" id="export-csv">CSV herunterladen</button>
       <button class="btn secondary" id="export-json">JSON herunterladen</button>
@@ -362,7 +362,7 @@ function openKpi(key) {
     },
     avg: {
       title: "Durchschnittliche Bewertung",
-      html: `<p>Gesamtmittelwert: <strong>${fmtAvg(s.avg)} / 7</strong></p>
+      html: `<p>Gesamtmittelwert: <strong>${fmtAvg(s.avg)} / 5</strong></p>
         <div class="score-list">${STATEMENTS.map((t, i) => `<div>${i + 1}. ${t} — <strong>${fmtAvg(s.statementAvgs[i])}</strong></div>`).join("")}</div>`,
     },
     top: {
@@ -380,7 +380,7 @@ function openKpi(key) {
         <dt>Top-2</dt><dd>${fmt(s.top)} (${s.topPct} %)</dd>
         <dt>Neutral</dt><dd>${fmt(s.mid)} (${s.midPct} %)</dd>
         <dt>Bottom-2</dt><dd>${fmt(s.low)} (${s.lowPct} %)</dd>
-        <dt>Mittelwert</dt><dd>${fmtAvg(s.avg)} / 7</dd>
+        <dt>Mittelwert</dt><dd>${fmtAvg(s.avg)} / 5</dd>
       </div>
       <p>Klicken Sie in der Navigation auf <strong>Bewertungen</strong>, um alle Einzelkarten zu öffnen.</p>`,
     },
@@ -410,7 +410,7 @@ function openFeedback(id) {
     .map(
       (score, i) => `<div class="statement-row">
         <b>${i + 1}.</b><p>${STATEMENTS[i]}</p>
-        <div class="bar-track"><div class="bar-fill" style="width:${(score / 7) * 100}%"></div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:${(score / 5) * 100}%"></div></div>
         <div class="avg">${score}</div>
       </div>`
     )
@@ -423,7 +423,7 @@ function openFeedback(id) {
       <dt>Dienststelle</dt><dd>${item.office}</dd>
       <dt>Online-Service</dt><dd>${item.service}</dd>
       <dt>Kanal</dt><dd>${item.channel}</dd>
-      <dt>Gesamtnote</dt><dd>${fmtAvg(item.avg)} / 7 · ${sentimentLabel(o)}</dd>
+      <dt>Gesamtnote</dt><dd>${fmtAvg(item.avg)} / 5 · ${sentimentLabel(o)}</dd>
     </dl>
     <h3 class="card-title">Bewertung je Aussage</h3>
     ${scores}
@@ -442,7 +442,7 @@ function openStatement(index) {
   openModal(
     `Aussage ${index + 1}`,
     `<p>${STATEMENTS[index]}</p>
-     <p>Durchschnitt im Filter: <strong>${fmtAvg(s.statementAvgs[index])} / 7</strong></p>
+     <p>Durchschnitt im Filter: <strong>${fmtAvg(s.statementAvgs[index])} / 5</strong></p>
      ${previewList(examples)}`
   );
 }
@@ -480,11 +480,11 @@ function downloadFile(type) {
     );
     content = [header.join(";"), ...rows].join("\n");
     mime = "text/csv;charset=utf-8";
-    name = "augsburg-feedback-dummy.csv";
+    name = "musterstadt-feedback-dummy.csv";
   } else {
     content = JSON.stringify(items, null, 2);
     mime = "application/json";
-    name = "augsburg-feedback-dummy.json";
+    name = "musterstadt-feedback-dummy.json";
   }
   const blob = new Blob([content], { type: mime });
   const url = URL.createObjectURL(blob);
@@ -520,7 +520,7 @@ function init() {
   $("#info-btn").addEventListener("click", () => {
     openModal(
       "Hinweise zum Clickdummy",
-      `<p>Dieses Dashboard ist ein interaktiver Prototyp für die Stadt Augsburg. Alle Zahlen, Dienststellenbezüge und Freitexte sind fiktiv.</p>
+      `<p>Dieses Dashboard ist ein interaktiver Prototyp für eine fiktive Stadtverwaltung („Musterstadt“). Alle Zahlen, Dienststellenbezüge und Freitexte sind fiktiv.</p>
        <ul>
          <li>Die linke Navigation wechselt die Unterseiten.</li>
          <li>Filter oben wirken auf alle Ansichten.</li>

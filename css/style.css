@@ -270,6 +270,7 @@ button.dist-col {
 .avg { text-align: right; color: var(--green); font-weight: 700; }
 .scale {
   display: flex;
+  gap: 0;
   justify-content: space-between;
   margin: 8px 0 0 38px;
   color: var(--muted);
@@ -310,12 +311,10 @@ button.dist-col {
   min-height: 4px;
 }
 .dist-col:nth-child(1) .dist-bar { background: #d7e6db; }
-.dist-col:nth-child(2) .dist-bar { background: #c7dccb; }
-.dist-col:nth-child(3) .dist-bar { background: #b4d0ba; }
-.dist-col:nth-child(4) .dist-bar { background: #8fb89a; }
-.dist-col:nth-child(5) .dist-bar { background: #3f8f5c; }
-.dist-col:nth-child(6) .dist-bar { background: #247a48; }
-.dist-col:nth-child(7) .dist-bar { background: #165a32; }
+.dist-col:nth-child(2) .dist-bar { background: #b4d0ba; }
+.dist-col:nth-child(3) .dist-bar { background: #8fb89a; }
+.dist-col:nth-child(4) .dist-bar { background: #3f8f5c; }
+.dist-col:nth-child(5) .dist-bar { background: #165a32; }
 .pct { font-size: 12px; font-weight: 700; color: var(--green); }
 .dist-label { font-size: 12px; color: var(--muted); }
 .dist-axis {
@@ -545,4 +544,87 @@ tr.clickable:hover { background: var(--green-soft); cursor: pointer; }
   .nav-item { justify-content: center; font-size: 0; }
   .nav-item svg { width: 20px; height: 20px; }
   .brand strong, .brand span { display: none; }
+}
+
+.demo-banner {
+  background: #fff6d6;
+  color: #5c4a00;
+  border-bottom: 1px solid #ecd98a;
+  padding: 8px 16px;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ---------- Mobile (Smartphones) ---------- */
+@media (max-width: 768px) {
+  .topbar h1 { white-space: normal; font-size: 20px; }
+  .app { display: block; padding-bottom: 68px; }
+  .demo-banner { font-size: 12px; padding: 6px 12px; }
+
+  /* Sidebar -> feste Tab-Leiste unten */
+  .sidebar {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 15;
+    padding: 4px 4px calc(4px + env(safe-area-inset-bottom));
+    border-right: 0;
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -4px 16px rgba(22, 90, 50, 0.08);
+    flex-direction: row;
+    overflow: visible;
+  }
+  .brand, .skyline { display: none; }
+  .nav { flex-direction: row; width: 100%; gap: 2px; }
+  .nav-item {
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 2px;
+    font-size: 10.5px;
+    line-height: 1.1;
+    text-align: center;
+    justify-content: center;
+    min-width: 0;
+  }
+  .nav-item svg { width: 20px; height: 20px; }
+
+  .topbar { flex-direction: column; gap: 12px; padding: 14px 16px 4px; }
+  .filters { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: end; }
+  .filter select { min-width: 0; width: 100%; height: 40px; font-size: 14px; }
+  .filter:first-child { grid-column: 1 / -1; }
+  .updated { text-align: left; }
+  .icon-btn { justify-self: end; width: 34px; height: 34px; }
+
+  #view-root { padding: 10px 16px 8px; }
+  .kpi-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kpi { min-height: 0; flex-direction: column-reverse; gap: 6px; padding: 12px; }
+  .kpi h3 { font-size: 12px; }
+  .kpi .value { font-size: 26px; margin-top: 4px; }
+  .kpi-icon { width: 28px; height: 28px; }
+
+  .statement-head, .scale, .scale-caption { display: none !important; }
+  .statement-row {
+    grid-template-columns: 22px 1fr 40px;
+    row-gap: 6px;
+  }
+  .statement-row .bar-track { grid-column: 2 / 3; grid-row: 2; }
+  .statement-row .avg { grid-row: 1 / 3; grid-column: 3; }
+
+  .dist { height: 170px; gap: 6px; }
+  .dist-axis { font-size: 10px; gap: 4px; }
+  .summary { grid-template-columns: 1fr; }
+  .quotes { grid-template-columns: 1fr; }
+
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .search { min-width: 0; width: 100%; height: 40px; font-size: 16px; }
+  table { font-size: 12.5px; min-width: 560px; }
+  .table-wrap { margin: 0 -18px; padding: 0 18px; }
+
+  .kv { grid-template-columns: 1fr; gap: 2px 0; }
+  .kv dd { margin: 0 0 8px; }
+  .modal-backdrop { padding: 0; align-items: end; }
+  .modal { width: 100%; max-height: 90vh; border-radius: 18px 18px 0 0; }
+  .btn { flex: 1 1 100%; padding: 12px 16px; }
+
+  .hint { margin: 4px 16px 18px; font-size: 12px; }
 }
