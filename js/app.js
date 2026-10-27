@@ -151,7 +151,7 @@ function renderOverview(items, s) {
       <article class="card">
         <h2 class="card-title">Bewertung je Aussage (Ø auf Skala 1–5)</h2>
         <div class="statement-head" style="display:grid;grid-template-columns:28px 1fr 210px 36px;gap:10px;color:var(--muted);font-size:12px;">
-          <span>#</span><span>Aussage</span><span></span><span>Durchschnitt</span>
+          <span>#</span><span>Aussage</span><span></span><span style="text-align:right" title="Durchschnitt">Ø</span>
         </div>
         ${statementRows}
         <div class="scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
